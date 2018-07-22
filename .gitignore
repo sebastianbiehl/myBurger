@@ -9,6 +9,9 @@
 # production
 /build
 
+# Snippets
+/snippets
+
 # misc
 .DS_Store
 .env.local
