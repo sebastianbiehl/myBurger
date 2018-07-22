@@ -12,4 +12,4 @@ const layout = ( props ) => (
     </Wrap>
 )
 
-export default layout;
+export default layout; 
