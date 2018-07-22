@@ -7,7 +7,9 @@ import Toggler from '../Toggler/Toggler'
 
 const toolbar = props => (
   <header className={classes.Toolbar}>
-    <Toggler open={props.open}/>
+    <div className={classes.Toggler}>
+        <Toggler open={props.open} />
+    </div>
     <Logo height="80%" />
     <nav className={classes.DesktopOnly}>
       <Items />

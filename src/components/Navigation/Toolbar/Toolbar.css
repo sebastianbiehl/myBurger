@@ -17,6 +17,12 @@
     height: 100%;
 }
 
+@media(min-width:500px) {
+    .Toggler {
+        display: none;
+    }
+}
+
 
 @media (max-width: 499px) {
     .DesktopOnly {
