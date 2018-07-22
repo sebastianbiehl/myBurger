@@ -1,6 +1,6 @@
 import React from "react"
 
-import Wrap from '../../../hoc/Wrap'
+import Wrap from "../../../hoc/Wrap/Wrap";
 import Button from '../../UI/Button/Button'
 
 const orderSummary = props => {
