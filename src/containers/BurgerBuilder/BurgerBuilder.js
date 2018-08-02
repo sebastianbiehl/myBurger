@@ -1,32 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import axios from "../../axios-orders";
 
 import Wrap from '../../hoc/Wrap/Wrap'
 import Burger from '../../components/Burger/Burger'
 import BuildControls from '../../components/Burger/BuildControls/BuildControls'
 import Modal from '../../components/UI/Modal/Modal'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
-import axios from '../../axios-orders'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
-import * as actions from '../../store/actions'
+import * as actions from '../../store/actions/index'
 
 class BurgerBuilder extends Component {
   
   state = {
-    purchasing: false,
-    loading: false,
-    error: false
+    purchasing: false
   }
 
   componentDidMount() {
-    // axios.get("https://myburger-react-app.firebaseio.com/ingredients.json")
-    //     .then(response => {
-    //       this.setState({ingredients: response.data})
-    //     })
-    //     .catch( error => {
-    //       this.setState({error: true})
-    //     })
+    this.props.onInitIngredients()
   }
 
   updatePurchaseState(ingredients) {
@@ -48,6 +40,7 @@ class BurgerBuilder extends Component {
   }
 
   purchaseContinueHandler = () => {
+    this.props.onInitPurchase()
     this.props.history.push('./checkout')
   }
   
@@ -61,7 +54,7 @@ class BurgerBuilder extends Component {
     }
 
     let modalContent = null
-    let burger = this.state.error ? <p>Ingredients cannot be loaded :/</p> : <Spinner />
+    let burger = this.props.error ? <p>Ingredients cannot be loaded :/</p> : <Spinner />
 
     if(this.props.ingredients) {
       burger = (
@@ -74,10 +67,6 @@ class BurgerBuilder extends Component {
       modalContent = (
         <OrderSummary price={this.props.price} purchaseCancelled={this.purchaseCancelHandler} purchaseContinue={this.purchaseContinueHandler} ingredients={this.props.ingredients} />
       )
-    }
-
-    if (this.state.loading) {
-      modalContent = <Spinner />
     }
 
     return (
@@ -93,15 +82,18 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
   return {
-    ingredients: state.ingredients,
-    price: state.totalPrice
+    ingredients: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    error: state.burgerBuilder.error
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onIngredientAdded: (ing) => dispatch({type: actions.ADD_INGREDIENT, ingredientName: ing}),
-    onIngredientRemoved: (ing) => dispatch({ type: actions.REMOVE_INGREDIENT, ingredientName: ing })
+  return { 
+    onIngredientAdded: ing => dispatch(actions.addIngredient(ing)), 
+    onIngredientRemoved: ing => dispatch(actions.removeIngredient(ing)),
+    onInitIngredients: () => dispatch(actions.initIngredients()),
+    onInitPurchase: () => dispatch(actions.purchaseInit())
   }
 }
 
